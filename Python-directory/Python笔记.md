@@ -787,3 +787,238 @@ test1(100,200)
 
 
 
+# 0908-文件操作
+
+#### 路径操作
+
+````python
+os.getcwd()  #取当前目录
+os.path.adspath()   #取当前文件的绝对路径
+os.path.ditname()   #取上一层目录路径
+
+#示例：
+print(os.getcwd())#获取当前工作目录
+print(os.path.abspath('module1.py'))#当前文件的绝对路径
+print(os.path.dirname(r'D:\Mrtai\!!!e语言学习进度\9月份\python\存放路径\0908\module1.py'))
+print(os.path.dirname(r'\0907\module.py'))  #获取上一层文件夹的位置
+````
+
+```python
+os.path.exists()   #目录是否存在
+
+#示例：
+print(os.path.exists('D:\Mrtai\!!!e语言学习进度\9月份\python\存放路径'))  #存在 True
+print(os.path.exists(r'D:\Mrtai\!!!e语言学习进度\9月份\python\存放路径\aaa'))  #不存在 False
+```
+
+````python
+os.path.split()   #取路径的文件名
+
+#示例：
+print(os.path.split(r'D:\Mrtai\!!!e语言学习进度\9月份\python\存放路径\0908\module1.py'))  #返回module1.py
+````
+
+````python
+os.path.splitext()   #取文件后缀
+
+#示例：
+print(os.path.splitext(r'D:\Mrtai\!!!e语言学习进度\9月份\python\存放路径\0908\module1.py'))   #返回.py
+````
+
+````python
+os.path.isfile()   #判断是不是文件
+
+#示例：
+print(os.path.isfile('module1.py'))  #返回True
+print(os.path.isfile(r'D:\Mrtai\!!!e语言学习进度\9月份\python\存放路径\0908'))   #返回False
+````
+
+````python
+os.path.isdir()   #判断是不是目录
+
+#示例：
+print(os.path.isdir('module1.py'))  #返回False
+print(os.path.isdir(r'D:\Mrtai\!!!e语言学习进度\9月份\python\存放路径\0908'))   #返回True
+````
+
+````python
+os.listdir()   #取目录内文件---返回列表
+
+#示例：
+print(os.listdir(r'D:\Mrtai\!!!e语言学习进度\9月份\python\存放路径\0907'))   
+#返回一个list列表：['1.函数的使用.py', '2.面向对象的使用.py', '3.模块的使用.py', '4.模块的调用.py', '5.pip的使用.py', 'module1.py', 'person.py', 'person_test.py', '__pycache__', '作业一.py', '作业二.py']
+````
+
+#### 目录和文件操作
+
+**创建目录 和 删除目录**
+
+````pythopn
+os.makedirs('tmp') #创建目录
+os.rmdir('tmp') #删除目录
+````
+
+**创建文件，设置读或写模式**
+
+````python
+#创建一个aaa.py文件，然后设置模式 
+#操作完成后要close（）关闭
+#写：
+	#w（write）模式会覆盖、  a（add append）模式不覆盖
+#读：
+	#r（read）模式 
+
+ f=open('aaa.py','a') (w=write模式;a=add模式)
+ f.write("a='hello word'\n")
+ f.write('b=1\n')
+ f.write('c=2\n')
+ f.write('d=3\n')
+ f.close()
+````
+
+**简化代码：**
+
+```python
+###这种写法会自动关闭，不需要写关闭
+
+with open('aaa.py','a') as f:
+    f.write("a='hello word'\n")
+    f.write('b=1\n')
+    f.write('c=2\n')
+    f.write('d=3\n')
+        
+with open('aaa.py','r') as f:
+	print(f.read(10))  #读取指定字节内容
+	print(f.readline() ) #读取一行
+	print(f.readlines())  #读取所有行
+```
+
+**读图片、音频、视频：**
+
+```python
+#r=read模式 b=byte字节
+with open('logo.png','rb') as f:  
+	print(f.read())
+```
+
+**将图片复制**
+
+```python
+#读取图片，创建一个空图片，然后吧读取的数据写到空图片内
+f1= open('logo.png','rb')
+f2= open('logo2.png','wb')
+f2.write(f1.read())
+f2.close()
+f1.close()
+
+#简化代码
+with open('logo2.png','wb') as f2:
+    f1=open('logo.png','rb')
+    f2.write(f1.read())
+```
+
+### 操作Excel-openpyxl
+
+#### 获取exce文件
+
+```python
+def open():
+    from openpyxl import load_workbook
+    wb = load_workbook('test.xlsx') #加载Excel工作表
+    #sh1 = wb.active
+    sh2 = wb["Sheet1"] #取工作簿
+    #sh3 = wb.get_sheet_by_name('Sheet1') #已弃用了 不要用！！
+    print( sh2 )
+```
+
+#### 获取工作簿名称
+
+```python
+def show_sheets():
+    from openpyxl import load_workbook
+    #第一种方法：直接获取xlsx文件里的工作簿
+    wb = load_workbook('test.xlsx')
+    print(wb.sheetnames)
+    # 第二种方法：遍历获取xlsx文件里的工作簿
+    for sh in wb:
+        print(sh.title)
+```
+
+#### 获取某个表格的值
+
+```python
+def get_one_value():
+    from openpyxl import load_workbook
+    wb=load_workbook('test.xlsx')
+    sh1=wb['Sheet1']
+    v1=sh1.cell(1,1) #获取表格内 （1,1） 坐标位置的值
+    print(v1.value)
+    v2=sh1['A2'] #获取表格内 A2 坐标位置的值
+    print(v2.value)
+    v3s=sh1['A1:B2'] #获取表格内 A2-B2 坐标位置的值
+    for i in range(len(v3s)):  #用遍历方式将 A2-B2 的值输出
+        for a in range(len(v3s[i])):
+            print(v3s[i][a].value)
+```
+
+#### 获取行、列、所有值
+
+```python
+def get_all_value():
+    from openpyxl import  load_workbook
+    wb = load_workbook('test.xlsx')
+    sh = wb['Sheet1']
+    for row in sh.rows:   #获取行数
+        for cell in row:   #获取每行内的列
+            print(cell.value)
+
+    print(sh.max_column)   #获取所有列数
+    print(sh.max_row)   #获取所有行数
+    print(sh.dimensions)   #获取坐标范围区间 例如A1:C3
+```
+
+#### 创建Excel文件
+
+```python
+def new():
+    from openpyxl import Workbook
+    wb = Workbook()    #创建文件对象
+    # grab the active worksheet
+    sh1 = wb.active     #获取第一个sheet
+    sh2 = wb.create_sheet('番剧信息')    # 创建新工作簿，给名称
+    wb.save('test2.xlsx')   # 保存文件，给文件名
+```
+
+#### 写入数据到Excel文件
+
+```python
+#给指定位置表格写入数据
+def set_value():
+    from openpyxl import Workbook
+    wb=Workbook()
+    sh=wb.active
+    sh['A1']='hello'   # 写入 hello 数据到 A1 位置的表格
+    sh['A2']='python'  # 写入 hello 数据到 A2 位置的表格
+    sh['B1']='Excel'   # 写入 hello 数据到 B1 位置的表格
+    wb.save('test2.xlsx')
+
+    
+    
+#写入全部数据    
+def set_many_value():
+    from openpyxl import Workbook
+    wb = Workbook()
+    sh = wb.active
+
+    rows=[
+        ['一人之下',9.8,'冯宝宝'],
+        ['黑色五叶草',9.5,'五条悟'],
+        ['白色八饼',9.1,'魔法帝']
+    ]
+
+    for row in rows:  #读取数据
+        sh.append(row)  #数据写入创建的文件
+        print(row)   # 这个for循环，row返回的是数据，不是下标
+    wb.save('test3.xlsx')
+```
+
