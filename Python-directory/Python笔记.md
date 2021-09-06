@@ -1,4 +1,7 @@
+
+
 # 0903-数据类型和字符串操作
+
 >编写python程序的文件，称为python的脚本或程序。
 >要求当前python文件的后缀名必须是.py
 
@@ -660,9 +663,127 @@ print(fun10(2, 9))
 
 
 
+### 面向对象
+
+#### 定义与使用方式
+
+```Python
+class Person:
+    def __init__(self,name:str,sex:str='男',hobby:str='游戏') -> None:
+        self.name=name
+        self.sex=sex
+        self.hobby=hobby
+    def eat(self)-> None:
+        print('吃饭')
+    def study(self,info)-> None:
+        print(f'{info}')
+    def show_me(self)-> str:
+        return f'{self.name,self.hobby}'
+
+p1=Person('张三','女','喝酒')
+print(p1.show_me())
+```
 
 
-# 0907-面向对象
+
+
+
+# 0907-模块 
+
+> 模块包含：定义函数、类、变量、可执行代码
+
+#### `IMPORT`：
+
+> 模块定义好后，可以使用import语句引入模块，语法如下：
+>
+> import module1[,module2[,... moduleN]]
+
+#### `FROM ... IMPORT`:
+
+> from语句从模块中导入一个指定的部分
+>
+> from module import name1[, name2[, ... nameN]]
+
+#### 模块的使用：
+
+```python
+# 会把整个模块的内容导入进来
+import random
+print(random.randint(0,100))
+
+# 导入某个方法
+from random import randint,random
+print(randint(0,100))
+
+import math
+print(math.sqrt(9))
+print(math.sqrt(16))
+
+import time
+time.sleep(2)
+print('hi')
+
+```
+
+
+
+##### 方法改名
+
+````python
+from time import sleep as s    # 改名s
+s(2)
+print('python')
+````
+
+命名规范：
+
+- 由数字、字母、下划线组成
+- 不能数字开头
+- 不能使用内置关键字
+- 严格区分大小写
+
+
+
+#### 模块的创建
+
+```python
+def test1(a:int,b:int):
+    print(a+b)
+
+
+if __name__=='__main__':
+    test1(1,2)
+```
+
+#### 模块的调用
+
+```python
+from module1 import test1
+test1(100,200)
+```
+
+### pip 包管理工具
+
+> 该工具提供了对python包的查找、下载、安装、卸载功能，具体格式是：
+>
+> pip install module_name         ----安装模块
+>
+> pip uninstall module_name    ----卸载模块
+>
+> pip list                                         ----展示已安装模块
+
+**注意：下载时默认国外网站，可以换个数据源！**
+
+#### 更换清华源
+
+> 路径：C:\Users\Administrator\pip\pip.ini
+>
+> 
+>
+> [global]
+> timeout = 6000
+> index-url = https://pypi.tuna.tsinghua.edu.cn/simple
+> trusted-host = pypi.tuna.tsinghua.edu.cn
 
 
 
