@@ -1156,3 +1156,75 @@ for row in all:
 wb.save('test6.xlsx')
 ```
 
+#### 汇总统计
+
+```python
+#引包
+#打开文件
+#激活工作簿
+#读取数据
+#汇总
+#保存
+
+from  openpyxl import  load_workbook
+wb=load_workbook('room.xlsx')
+sh=wb.active
+all=[]
+for row in sh.iter_rows(min_row=2,min_col=2): #从第二行开始min_row=2,从第二列开始min_col=2
+    tmp_list=[]
+    for cell in row:
+        tmp_list.append(cell.value)
+    all.append(tmp_list)
+
+#汇总
+all_count=[]
+for a in all:
+    count=0 #单行数据的和
+    for n in a:
+        tmp=str(n) #获取判断是否为数字的问题
+        if tmp.isdigit(): #进行判断否为数字
+            count  += n
+    all_count.append(count)
+
+print(sh.max_column)#获取最大列
+print(sh.max_row)#获取最大列
+column_num=sh.max_column+1 #记录写到哪一列
+sh.cell(1,column_num).value='汇总'
+num=2
+for n in all_count:
+    sh.cell(num,column_num).value=n
+    num+=1
+wb.save('test.xlsx')
+print(all_count)
+```
+
+#### 美化Excel
+
+```python
+from openpyxl import  Workbook
+from openpyxl.styles import Font, colors, Alignment,PatternFill
+
+wb=Workbook()
+sh=wb.active
+
+#字体美化
+font=Font(name='百度简综艺',size=30,bold=True,italic=True,color='00CC99FF')
+sh['B2']='Hello'
+sh['B2'].font=font
+
+#行高 列宽 定义
+sh.row_dimensions[6].height=30
+sh.column_dimensions['C'].width=15
+
+#字体对齐方式：center居中，right右对齐，left左对齐，top上对齐
+sh['C6'].value='Python'
+sh['C6'].alignment=Alignment(horizontal='center',vertical='center')
+
+#背景颜色填充
+sh['H6'].fill=PatternFill('solid','FFAEB9')
+
+wb.save('test1.xlsx')
+```
+
+#### 快速生成工资条
+
