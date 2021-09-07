@@ -1,6 +1,6 @@
 
 
-# 0903-数据类型和字符串操作
+# 数据类型和字符串操作
 
 >编写python程序的文件，称为python的脚本或程序。
 >要求当前python文件的后缀名必须是.py
@@ -8,8 +8,11 @@
 #### Python中的注释
 
 >注释就是一段说明文字，不会被执行。
-> 在python的脚本中，开头的第一个字符如果是#号，那么就是注释了。
+>在python的脚本中，开头的第一个字符如果是#号，那么就是注释了。
 >''' 或者 “”“ 也是注释
+
+> 中文编码声明 #coding:utf-8
+
 ## 基本数据类型
 
 #### 变量
@@ -56,6 +59,14 @@
   - float 浮点数
 - bool 布尔值
 - str 字符串
+
+#### 数据类型转换
+
+> str() 转换成字符串
+>
+> int() 转换成整数，文字类和小数类型的字符串无法转成整数，浮点数转整数舍去小数点后的数字
+>
+> float() 转换成浮点型，文字类无法转成浮点数
 
 #### 运算符
 
@@ -267,7 +278,7 @@ print(info6.isspace())  # 空白
 
 
 
-# 0904-容器
+# 容器
 
 #### 列表
 
@@ -381,7 +392,7 @@ print(dict3)
 
 
 
-# 0905-条件/循环语句
+# 条件/循环语句
 
 #### 选择结构
 
@@ -606,7 +617,7 @@ else:
 
 
 
-# 0906-函数的使用
+# 函数的使用
 
 #### 定义格式
 
@@ -688,7 +699,7 @@ print(p1.show_me())
 
 
 
-# 0907-模块 
+# 模块 
 
 > 模块包含：定义函数、类、变量、可执行代码
 
@@ -787,7 +798,7 @@ test1(100,200)
 
 
 
-# 0908-文件操作
+# 文件操作
 
 #### 路径操作
 
@@ -1020,5 +1031,128 @@ def set_many_value():
         sh.append(row)  #数据写入创建的文件
         print(row)   # 这个for循环，row返回的是数据，不是下标
     wb.save('test3.xlsx')
+```
+
+#### 快速分类
+
+```python
+from openpyxl import  load_workbook #引入模块
+
+wb=load_workbook('all_video.xlsx')
+sh=wb.active 
+#大于300w点赞的放到data2，小于300w点赞的放到data1
+data1=[] #少于三百万
+data2=[] #大于三百万 
+for row in sh.rows: # row=元组
+    info=row[3].value
+    if info >= 300:
+        data2.append(row)
+    else:
+        data1.append(row)
+#创建2个新工作簿
+data1_sh=wb.create_sheet('小于三百万的')
+data2_sh=wb.create_sheet('大于三百万的')
+#小于和大于300万点赞的番剧信息分别放入对应工作簿
+for d in data1:
+    tmp_list=[]
+    for tmp in d:
+        tmp_list.append(tmp.value)
+    data1_sh.append(tmp_list)
+
+for d in data2:
+    tmp_list=[]
+    for tmp in d:
+        tmp_list.append(tmp.value)
+    data2_sh.append(tmp_list)
+wb.save('test4.xlsx')
+```
+
+#### 整理合并
+
+```python
+#操作Excel
+#打开Excel文件
+#激活Excel工作簿sheet
+#读取数据
+    #合并几个就读取几个
+    #整合所有数据
+#保存所有数据
+
+from openpyxl import load_workbook,Workbook
+wb=load_workbook('test4.xlsx')
+sh1=wb['小于三百万的']
+sh2=wb['大于三百万的']
+
+all=[]
+for row in sh1.rows: #获取所有行
+    tmp_list=[] #用来存储一行的值
+    for cell in row: #获取所有列
+       tmp_list.append(cell.value)   #获取所有值
+    all.append(tmp_list)  #整合数据
+
+for row in sh2.rows: #获取所有行
+    tmp_list=[] #用来存储一行的值
+    for cell in row: #获取所有列
+       tmp_list.append(cell.value)   #获取所有值
+    all.append(tmp_list)  #整合数据
+
+wb=Workbook()
+sh=wb.active
+for row in all:
+    sh.append(row)
+wb.save('test5.xlsx')
+```
+
+#### 合并多个文档
+
+```python
+#引入包
+#打开Excel
+    #合并几个就打开几个
+#激活工作簿
+#定义变量存储数据
+#读取数据
+#保存数据
+
+from openpyxl import load_workbook,Workbook
+wb1=load_workbook('video1.xlsx')
+wb2=load_workbook('video2.xlsx')
+wb3=load_workbook('video3.xlsx')
+wb4=load_workbook('video4.xlsx')
+sh1=wb1.active
+sh2=wb2.active
+sh3=wb3.active
+sh4=wb4.active
+
+all=[]
+for row in sh1.rows:
+    tmp_list=[]
+    for cell in row:
+        tmp_list.append(cell.value)
+    all.append(tmp_list)
+
+for row in sh2.rows:
+    tmp_list=[]
+    for cell in row:
+        tmp_list.append(cell.value)
+    all.append(tmp_list)
+
+for row in sh3.rows:
+    tmp_list=[]
+    for cell in row:
+        tmp_list.append(cell.value)
+    all.append(tmp_list)
+
+for row in sh4.rows:
+    tmp_list=[]
+    for cell in row:
+        tmp_list.append(cell.value)
+    all.append(tmp_list)
+
+wb=Workbook()
+sh=wb.active
+for row in all:
+    sh.append(row)
+wb.save('test6.xlsx')
 ```
 
