@@ -8,5 +8,5 @@ print(id(s2))
 print(id(s3))
 print(id(s4))
 
-#is运算符 比较内存地址
+# is运算符 比较内存地址
 print(s1 is s4)
