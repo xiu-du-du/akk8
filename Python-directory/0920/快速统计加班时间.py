@@ -45,5 +45,6 @@ def statistics():
 
 
 if __name__ == '__main__':
-    # creat_data()
+    creat_data()
     statistics()
+
