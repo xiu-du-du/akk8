@@ -13,11 +13,10 @@ from openpyxl import load_workbook
 from openpyxl import Workbook
 wb=load_workbook('工资数据.xlsx')
 sh=wb['Sheet1']
-title=None
+title=[]
 # ===========方法一
 for i,row in enumerate(sh.rows):
     tmp_list=[]
-
     for cell in row:
         tmp_list.append(cell.value)
         print(tmp_list)
